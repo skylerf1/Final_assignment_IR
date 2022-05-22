@@ -41,7 +41,9 @@ if __name__ == "__main__":
             else:
                 not_in_result += 1
 
-        print('Query %d, %d irrelevant, %d omitted, %d relevant' % (
-            index + 1, len(current_trash), len(current_omit), len(current_relevant)), end='\t\t\t')
-        print('Found %d irrelevant, %d omitted, %d relevant\t%d new results' % (
-            found_trash, found_omit, found_relevant, not_in_result))
+        print('Query %d, %d - %d - %.2f%% irrelevant matches' % (
+            index + 1, len(current_trash), found_trash, found_trash/len(current_trash) * 100), end='\t\t')
+        print('%d - %d - %.2f%% omitted matches' % (
+            len(current_omit), found_omit, found_omit / len(current_omit) * 100), end='\t\t')
+        print('%d - %d - %.2f%% relevant matches' % (
+            len(current_relevant), found_relevant, found_relevant / len(current_relevant) * 100))
