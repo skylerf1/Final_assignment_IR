@@ -15,10 +15,12 @@ if __name__ == "__main__":
         query_id = str(current_row['query_id'])
         if query_id not in qrel_dict:
             qrel_dict[query_id] = {}
-        qrel_dict[query_id][current_row['doc_id']] = current_row['relevance']
+        qrel_dict[query_id][current_row['doc_id']] = round((current_row['relevance'] + 0.1) / 2)
 
     for index, current_row in queries.iterrows():
         query_id = str(index + 1)
+        if query_id not in results_dict:
+            results_dict[query_id] = {}
         current_curated = curated_results[curated_results.query_id == current_row.query_id]
         current_trash = set(current_curated[current_curated.relevance == 0]['doc_id'])
         current_omit = set(current_curated[current_curated.relevance == 1]['doc_id'])
@@ -46,16 +48,17 @@ if __name__ == "__main__":
         for hit in res['hits']['hits']:
             if hit['_id'] in current_relevant:
                 found_relevant += 1
+                relevance_level = 1
             elif hit['_id'] in current_omit:
                 found_omit += 1
+                relevance_level = 1
             elif hit['_id'] in current_trash:
                 found_trash += 1
+                relevance_level = 0
             else:
                 not_in_result += 1
-
-            if query_id not in results_dict:
-                results_dict[query_id] = {}
-            results_dict[query_id][hit['_id']] = 2
+                relevance_level = 0
+            results_dict[query_id][hit['_id']] = relevance_level
 
         print('Query %s, %d - %d - %.2f%% irrelevant matches' % (
             query_id, len(current_trash), found_trash, found_trash/len(current_trash) * 100), end='\t\t')
