@@ -1,5 +1,3 @@
-from datetime import datetime
-import csv
 from elasticsearch import Elasticsearch, helpers
 import ir_datasets
 import pandas as pd

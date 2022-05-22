@@ -67,4 +67,6 @@ if __name__ == "__main__":
     evaluator = pytrec_eval.RelevanceEvaluator(
         qrel_dict, pytrec_eval.supported_measures)
 
-    print(json.dumps(evaluator.evaluate(results_dict), indent=1))
+    with open('results.json', 'w', encoding='utf-8') as f:
+        json.dump(evaluator.evaluate(results_dict), f, indent=4)
+    print('Done :)')
