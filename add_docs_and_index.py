@@ -12,7 +12,7 @@ def filterKeys(document):
 
 def doc_generator(df, index_name):
     for index, document in df.iterrows():
-        if index % 1000 == 0:
+        if index % 2000 == 0:
             sys.stdout.write('\rAdded {:10d} documents'.format(index))
 
         yield {
@@ -49,7 +49,7 @@ if __name__ == "__main__":
 
     if es.indices.exists('clinical'):
         es.indices.delete('clinical')
-        print('Index already exists')
+        print('Index already exists, removing...')
     es.indices.create('clinical', body=request_body)
     print('Created Index')
 
@@ -65,4 +65,8 @@ if __name__ == "__main__":
 
     use_these_keys = ['content']
 
-    helpers.bulk(es, doc_generator(df, 'clinical'))
+    try:
+        helpers.bulk(es, doc_generator(df, 'clinical'))
+    except RuntimeError:
+        es.indices.refresh(index="clinical")
+    print('\n\nDone :)')
