@@ -17,7 +17,7 @@ if __name__ == "__main__":
             "query": {
                 "bool": {
                     "should": [
-                        {"match": {"content": 'anaplastic'}}
+                        {"match": {"content": current_row.query_text}}
                     ],
                     "minimum_should_match": 1,
                     "boost": 1.0
